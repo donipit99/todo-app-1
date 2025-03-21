@@ -28,7 +28,6 @@ type AuthService struct {
 
 func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
-
 }
 
 func (s *AuthService) CreateUser(user todo.User) (int, error) {
@@ -43,11 +42,11 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
-		StandardClaims: jwt.StandardClaims{
+		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
-		UserId: user.Id,
+		user.Id,
 	})
 
 	return token.SignedString([]byte(signingKey))
@@ -77,5 +76,6 @@ func generatePasswordHash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))
 
-	return fmt.Sprintf("%x", hash.Sum(([]byte)(salt)))
+	return fmt.Sprintf("%x", hash.Sum([]byte(salt)))
+
 }
