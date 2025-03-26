@@ -19,12 +19,11 @@ import (
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /auth/sign-up [post]
-
 func (h *Handler) signUp(c *gin.Context) {
 	var input todo.User
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
 		return
 	}
 
@@ -56,7 +55,6 @@ type signInInput struct {
 // @Failure 500 {object} errorResponse
 // @Failure default {object} errorResponse
 // @Router /auth/sign-in [post]
-
 func (h *Handler) signIn(c *gin.Context) {
 	var input signInInput
 
